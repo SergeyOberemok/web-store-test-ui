@@ -8,6 +8,7 @@ import { RegisterComponent } from './register/register.component';
 import { CoreModule } from './core/core.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { StoreModule } from './store/store.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, RegisterComponent],
@@ -17,7 +18,8 @@ import { StoreModule } from './store/store.module';
     BrowserAnimationsModule,
     CoreModule,
     ReactiveFormsModule,
-    StoreModule
+    StoreModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent],
