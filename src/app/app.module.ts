@@ -9,6 +9,7 @@ import { CoreModule } from './core/core.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { StoreModule } from './store/store.module';
 import { HttpClientModule } from '@angular/common/http';
+import { API_URLS } from './core/shared';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, RegisterComponent],
@@ -19,9 +20,14 @@ import { HttpClientModule } from '@angular/common/http';
     CoreModule,
     ReactiveFormsModule,
     StoreModule,
-    HttpClientModule
+    HttpClientModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: 'URLS',
+      useValue: API_URLS,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,14 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import {
-  FormGroup,
-  FormControl,
-  Validators,
-  FormBuilder,
-} from '@angular/forms';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
-import { filter, takeUntil } from 'rxjs/operators';
+import { filter, takeUntil, finalize } from 'rxjs/operators';
+import { User } from '../shared';
 
 @Component({
   selector: 'app-register',
@@ -20,6 +16,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   emailFormControlName = 'email';
   passwordFormControlName = 'password';
   repeatPasswordFormControlName = 'repeatPassword';
+  isRegistering: boolean;
 
   private destroy$: Subject<void> = new Subject();
 
@@ -48,19 +45,28 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   public onSubmit(): void {
+    this.isRegistering = true;
+
     this.auth
-      .register()
-      .pipe(
-        filter((result: boolean) => result),
-        takeUntil(this.destroy$)
+      .register(
+        new User({
+          email: this.formGroup.get('email').value,
+          password: this.formGroup.get('password').value,
+        })
       )
-      .subscribe((result: boolean) => this.router.navigate(['/login']));
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => (this.isRegistering = false))
+      )
+      .subscribe((user: User) => {
+        if (user.id) {
+          this.router.navigate(['/login']);
+        }
+      });
   }
 
   private passwordMatchValidator(formGroup: FormGroup): void {
-    const passwordFormControl = formGroup.get(
-      this.passwordFormControlName
-    );
+    const passwordFormControl = formGroup.get(this.passwordFormControlName);
     const repeatPasswordFormControl = formGroup.get(
       this.repeatPasswordFormControlName
     );

@@ -6,7 +6,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
-import { API_URLS } from './shared/api-urls';
 
 const MAT_MODULES = [
   MatCardModule,
@@ -21,11 +20,6 @@ const MAT_MODULES = [
   declarations: [],
   imports: [CommonModule, ...MAT_MODULES],
   exports: [...MAT_MODULES],
-  providers: [
-    {
-      provide: 'URLS',
-      useValue: API_URLS,
-    },
-  ],
+  providers: [],
 })
 export class CoreModule {}

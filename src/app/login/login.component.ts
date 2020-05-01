@@ -8,7 +8,8 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { filter, takeUntil, switchMap, tap, finalize } from 'rxjs/operators';
+import { User } from '../shared';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   formGroup: FormGroup;
   emailFormControlName = 'email';
   passwordFormControlName = 'password';
+  isAuthenticating: boolean;
 
   private destroy$: Subject<void> = new Subject();
 
@@ -41,12 +43,27 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   public onSubmit(): void {
+    this.isAuthenticating = true;
+
     this.auth
-      .authenticate()
-      .pipe(
-        filter((result: boolean) => result),
-        takeUntil(this.destroy$)
+      .authenticate(
+        new User({
+          email: this.formGroup.get('email').value,
+          password: this.formGroup.get('password').value,
+        })
       )
-      .subscribe((result: boolean) => this.router.navigate(['/store']));
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => (this.isAuthenticating = false))
+      )
+      .subscribe(
+        (user: User) => {
+          console.log('login success', user);
+          if (this.auth.isAuthenticated) {
+            this.router.navigate(['/store']);
+          }
+        },
+        (error: any) => console.error(error)
+      );
   }
 }

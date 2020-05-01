@@ -1,7 +1,16 @@
 export interface UserDto {
-  name: string;
+  id: number;
+  email: string;
+  password: string;
 }
 
 export class User implements UserDto {
-  name: string;
+  id: number;
+  email: string;
+  password: string;
+
+  constructor(params: { email?: string, password?: string } = {}) {
+    this.email = params.email;
+    this.password = params.password;
+  }
 }

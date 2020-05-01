@@ -23,7 +23,7 @@
           <mat-card-actions class="mb-0">
             <div class="w-100 d-flex justify-content-between">
               <a mat-button routerLink="/register">Register</a>
-              <button mat-raised-button type="submit">Enter</button>
+              <button mat-raised-button type="submit" [disabled]="isAuthenticating">Enter</button>
             </div>
           </mat-card-actions>
         </form>
