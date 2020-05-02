@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { ProductsService } from '../services/products.service';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Product } from '../shared';
 
@@ -9,11 +8,17 @@ import { Product } from '../shared';
   styleUrls: ['./product-list.component.scss'],
 })
 export class ProductListComponent implements OnInit {
+  @Input()
   public products$: Observable<Product[]>;
+  @Input() isCatalog: boolean;
+  @Input() isCart: boolean;
+  @Output() selected: EventEmitter<Product> = new EventEmitter();
 
-  constructor(private productsService: ProductsService) {}
+  constructor() {}
 
-  ngOnInit(): void {
-    this.products$ = this.productsService.fetchProducts();
+  ngOnInit(): void {}
+
+  public itemSelected($event: Product): void {
+    this.selected.emit($event);
   }
 }

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { StoreRoutingModule } from './store-routing.module';
 import { StoreComponent } from './store.component';
 import { CoreModule } from '../core/core.module';
@@ -9,6 +8,8 @@ import { ProductComponent } from './product/product.component';
 import { CartComponent } from './cart/cart.component';
 import { CatalogComponent } from './catalog/catalog.component';
 import { ProductsService } from './services/products.service';
+import { CartService } from './services/cart.service';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,8 +19,8 @@ import { ProductsService } from './services/products.service';
     CartComponent,
     CatalogComponent,
   ],
-  imports: [CommonModule, StoreRoutingModule, CoreModule],
+  imports: [CommonModule, StoreRoutingModule, CoreModule, ReactiveFormsModule],
   exports: [StoreComponent],
-  providers: [ProductsService],
+  providers: [ProductsService, CartService],
 })
 export class StoreModule {}

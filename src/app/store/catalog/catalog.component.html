@@ -1,9 +1,9 @@
 <div class="container">
-  <div class="row">
+  <div class="row mb-3">
     <div class="col">
       <h3>Catalogue</h3>
     </div>
   </div>
 </div>
 
-<app-product-list></app-product-list>
+<app-product-list [products$]="products$" [isCatalog]="true" (selected)="addToCard($event)"></app-product-list>

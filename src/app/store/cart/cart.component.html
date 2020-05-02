@@ -1,12 +1,9 @@
 <div class="container">
-  <div class="row">
+  <div class="row mb-3">
     <div class="col">
       <h3>Cart</h3>
     </div>
   </div>
-  <div class="row">
-    <div class="col">
-      <app-product-list></app-product-list>
-    </div>
-  </div>
 </div>
+
+<app-product-list [products$]="products$" [isCart]="true" (selected)="updateOrRemoveProduct($event)"></app-product-list>
