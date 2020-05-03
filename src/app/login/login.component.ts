@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { filter, takeUntil, switchMap, tap, finalize } from 'rxjs/operators';
 import { User } from '../shared';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +22,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   emailFormControlName = 'email';
   passwordFormControlName = 'password';
   isAuthenticating: boolean;
+  errorMessage: string;
 
   private destroy$: Subject<void> = new Subject();
 
@@ -62,7 +64,12 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.router.navigate(['/store']);
           }
         },
-        (error: any) => console.error(error)
+        (error: HttpErrorResponse) => {
+          console.error(error);
+
+          this.errorMessage = error.error.message;
+          setTimeout(() => (this.errorMessage = ''), 4000);
+        }
       );
   }
 }

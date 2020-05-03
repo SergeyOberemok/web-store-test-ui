@@ -5,6 +5,7 @@ import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { filter, takeUntil, finalize } from 'rxjs/operators';
 import { User } from '../shared';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -17,6 +18,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   passwordFormControlName = 'password';
   repeatPasswordFormControlName = 'repeatPassword';
   isRegistering: boolean;
+  errorMessage: string;
 
   private destroy$: Subject<void> = new Subject();
 
@@ -58,11 +60,19 @@ export class RegisterComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         finalize(() => (this.isRegistering = false))
       )
-      .subscribe((user: User) => {
-        if (user.id) {
-          this.router.navigate(['/login']);
+      .subscribe(
+        (user: User) => {
+          if (user.id) {
+            this.router.navigate(['/login']);
+          }
+        },
+        (error: HttpErrorResponse) => {
+          console.error(error);
+
+          this.errorMessage = error.error.message;
+          setTimeout(() => (this.errorMessage = ''), 4000);
         }
-      });
+      );
   }
 
   private passwordMatchValidator(formGroup: FormGroup): void {
