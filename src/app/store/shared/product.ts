@@ -14,9 +14,14 @@ export class Product implements ProductDto {
   quantity: number;
 
   constructor() {
+    this.id = 0;
     this.title = '';
     this.available = 0;
     this.price = 0;
     this.quantity = 0;
+  }
+
+  public getMax(): number {
+    return this.available;
   }
 }

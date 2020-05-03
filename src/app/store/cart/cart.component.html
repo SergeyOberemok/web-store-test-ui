@@ -6,4 +6,5 @@
   </div>
 </div>
 
-<app-product-list [products$]="products$" [isCart]="true" (selected)="updateOrRemoveProduct($event)"></app-product-list>
+<app-product-list [products$]="products$" [isCart]="true" (updated)="updateCartItem($event)"
+  (removed)="removeCartItem($event)"></app-product-list>

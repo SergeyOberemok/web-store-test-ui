@@ -6,4 +6,4 @@
   </div>
 </div>
 
-<app-product-list [products$]="products$" [isCatalog]="true" (selected)="addToCard($event)"></app-product-list>
+<app-product-list [products$]="products$" [isCatalog]="true" (added)="addToCard($event)"></app-product-list>

@@ -38,14 +38,13 @@
         <div class="col d-flex justify-content-between align-items-center">
           <mat-form-field>
             <mat-label>Quantity</mat-label>
-            <input type="number" matInput placeholder="Quantity" min="1" [max]="product.available"
-              formControlName="quantity" #quantity>
+            <input type="number" matInput placeholder="Quantity" min="0" [max]="maxQuantity" formControlName="quantity">
           </mat-form-field>
 
           <span>Total price:</span>
-          <span>{{ quantity.value * product.price | currency }}</span>
+          <span>{{ product.quantity * product.price | currency }}</span>
 
-          <button mat-raised-button type="submit" class="mx-0">Add to cart</button>
+          <button mat-raised-button type="submit" class="mx-0" [disabled]="product.quantity === 0">Add to cart</button>
         </div>
       </div>
     </div>
@@ -53,30 +52,34 @@
 </ng-template>
 
 <ng-template #cartContent>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col d-flex justify-content-between align-items-center">
-        <mat-form-field>
-          <mat-label>Available</mat-label>
-          <input type="number" matInput placeholder="Available" min="1" [max]="product.quantity + product.available">
-        </mat-form-field>
-        <span>Total price:</span>
-        <span>{{ product.available * product.price | currency }}</span>
-      </div>
-    </div>
-  </div>
-</ng-template>
-
-<ng-template #cartFooter>
-  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+  <form [formGroup]="formGroup">
     <div class="container-fluid">
-      <div class="row mb-3">
-        <div class="col d-flex justify-content-end align-items-center">
-          <button mat-raised-button type="submit" class="mx-0">Update</button>
+      <div class="row">
+        <div class="col d-flex justify-content-between align-items-center">
+          <mat-form-field>
+            <mat-label>Quantity</mat-label>
+            <input type="number" matInput placeholder="Quantity" min="1" [max]="maxQuantity" formControlName="quantity">
+          </mat-form-field>
 
-          <button mat-raised-button type="submit" class="mx-0">Remove from cart</button>
+          <span>Available:</span>
+          <span>{{ maxQuantity - product.quantity }}</span>
+
+          <span>Total price:</span>
+          <span>{{ product.quantity * product.price | currency }}</span>
         </div>
       </div>
     </div>
   </form>
+</ng-template>
+
+<ng-template #cartFooter>
+    <div class="container-fluid">
+      <div class="row mb-3">
+        <div class="col d-flex justify-content-between align-items-center">
+          <button mat-raised-button (click)="updateClicked()" class="mx-0">Update</button>
+
+          <button mat-raised-button (click)="removeClicked()" class="mx-0">Remove from cart</button>
+        </div>
+      </div>
+    </div>
 </ng-template>

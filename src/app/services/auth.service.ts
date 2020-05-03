@@ -51,7 +51,15 @@ export class AuthService {
   }
 
   public logout(): Observable<boolean> {
-    this.user = null;
+    this.user = new User();
     return of(true);
+  }
+
+  public getAuthToken(): string {
+    if (!this.isAuthenticated()) {
+      return '';
+    }
+
+    return 'Basic ' + btoa(`${this.user.email}:${this.user.password}`);
   }
 }

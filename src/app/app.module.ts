@@ -8,8 +8,9 @@ import { RegisterComponent } from './register/register.component';
 import { CoreModule } from './core/core.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { StoreModule } from './store/store.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { API_URLS } from './core/shared';
+import { AuthInterceptor } from './services/auth.interceptor';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, RegisterComponent],
@@ -27,6 +28,11 @@ import { API_URLS } from './core/shared';
       provide: 'URLS',
       useValue: API_URLS,
     },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    }
   ],
   bootstrap: [AppComponent],
 })

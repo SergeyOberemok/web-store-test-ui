@@ -58,7 +58,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         (user: User) => {
-          console.log('login success', user);
           if (this.auth.isAuthenticated) {
             this.router.navigate(['/store']);
           }

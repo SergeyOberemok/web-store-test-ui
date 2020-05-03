@@ -3,7 +3,7 @@ const host = 'api';
 export interface ApiUrls {
   auth: { login: string; register: string };
   products: { index: string };
-  cart: { index: string; store: string; destroy: string };
+  cart: { index: string; store: string; update: string; destroy: string };
 }
 
 export const API_URLS: ApiUrls = {
@@ -17,6 +17,7 @@ export const API_URLS: ApiUrls = {
   cart: {
     index: `${host}/cart`,
     store: `${host}/cart`,
+    update: `${host}/cart/\${id}`,
     destroy: `${host}/cart/\${id}`,
   },
 };

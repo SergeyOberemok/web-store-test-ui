@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CartService } from '../services/cart.service';
 import { Product } from '../shared';
+import { CartProduct } from '../shared/cart-product';
 
 @Component({
   selector: 'app-cart',
@@ -17,9 +18,18 @@ export class CartComponent implements OnInit {
     this.products$ = this.cartService.fetchProducts();
   }
 
-  public updateOrRemoveProduct($event: Product): void {
+  public removeCartItem($event: CartProduct): void {
     this.cartService.destroyProduct($event).subscribe(
-      (destroyedProduct: Product) => console.log(destroyedProduct),
+      (destroyedProduct: CartProduct) =>
+        (this.products$ = this.cartService.fetchProducts()),
+      (error: any) => console.error(error)
+    );
+  }
+
+  public updateCartItem($event: CartProduct): void {
+    this.cartService.updateProduct($event).subscribe(
+      (updatedProduct: CartProduct) =>
+        (this.products$ = this.cartService.fetchProducts()),
       (error: any) => console.error(error)
     );
   }

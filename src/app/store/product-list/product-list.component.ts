@@ -12,13 +12,24 @@ export class ProductListComponent implements OnInit {
   public products$: Observable<Product[]>;
   @Input() isCatalog: boolean;
   @Input() isCart: boolean;
-  @Output() selected: EventEmitter<Product> = new EventEmitter();
+
+  @Output() added: EventEmitter<Product> = new EventEmitter();
+  @Output() updated: EventEmitter<Product> = new EventEmitter();
+  @Output() removed: EventEmitter<Product> = new EventEmitter();
 
   constructor() {}
 
   ngOnInit(): void {}
 
-  public itemSelected($event: Product): void {
-    this.selected.emit($event);
+  public itemAdded($event: Product): void {
+    this.added.emit($event);
+  }
+
+  public itemUpdated($event: Product): void {
+    this.updated.emit($event);
+  }
+
+  public itemRemoved($event: Product): void {
+    this.removed.emit($event);
   }
 }
