@@ -1,9 +1,38 @@
-<div class="container">
-  <div class="row mb-3">
-    <div class="col">
-      <h3>Catalogue</h3>
+<ng-container *ngIf="products$ | async as items; else loading">
+  <ng-container *ngTemplateOutlet="items.length > 0 ? list : empty; context: { items: items }"></ng-container>
+</ng-container>
+
+<ng-template #list let-items="items">
+  <div class="container">
+    <div class="row mb-3">
+      <div class="col">
+        <h3>Catalogue</h3>
+      </div>
     </div>
   </div>
-</div>
 
-<app-product-list [products$]="products$" [isCatalog]="true" (added)="addToCard($event)"></app-product-list>
+  <app-product-list
+    [products]="items"
+    (added)="addToCard($event)"
+  ></app-product-list>
+</ng-template>
+
+<ng-template #loading>
+  <div class="container">
+    <div class="row mb-3">
+      <div class="col">
+        <h3>Loading</h3>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #empty>
+  <div class="container">
+    <div class="row mb-3">
+      <div class="col">
+        <h3>Catalogue is empty</h3>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { CartService } from '../services/cart.service';
-import { Product } from '../shared';
-import { CartProduct } from '../shared/cart-product';
+import { Cart } from '../shared/cart';
 
 @Component({
   selector: 'app-cart',
@@ -10,27 +9,29 @@ import { CartProduct } from '../shared/cart-product';
   styleUrls: ['./cart.component.scss'],
 })
 export class CartComponent implements OnInit {
-  public products$: Observable<Product[]>;
+  public cart$: Observable<Cart[]>;
 
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
-    this.products$ = this.cartService.fetchProducts();
+    this.cart$ = this.cartService.fetchCart();
   }
 
-  public removeCartItem($event: CartProduct): void {
-    this.cartService.destroyProduct($event).subscribe(
-      (destroyedProduct: CartProduct) =>
-        (this.products$ = this.cartService.fetchProducts()),
+  public removeCartItem($event: Cart): void {
+    this.cartService.destroyCart($event).subscribe(
+      (destroyedProduct: Cart) => (this.cart$ = this.cartService.fetchCart()),
       (error: any) => console.error(error)
     );
   }
 
-  public updateCartItem($event: CartProduct): void {
-    this.cartService.updateProduct($event).subscribe(
-      (updatedProduct: CartProduct) =>
-        (this.products$ = this.cartService.fetchProducts()),
+  public updateCartItem($event: Cart): void {
+    this.cartService.updateCart($event).subscribe(
+      (updatedProduct: Cart) => (this.cart$ = this.cartService.fetchCart()),
       (error: any) => console.error(error)
     );
+  }
+
+  public cartCheckout(): void {
+    this.cartService.checkout().subscribe(() => (this.cart$ = of([])));
   }
 }

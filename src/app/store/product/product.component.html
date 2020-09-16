@@ -38,7 +38,7 @@
         <div class="col d-flex justify-content-between align-items-center">
           <mat-form-field>
             <mat-label>Quantity</mat-label>
-            <input type="number" matInput placeholder="Quantity" min="0" [max]="maxQuantity" formControlName="quantity">
+            <input type="number" matInput placeholder="Quantity" min="0" [max]="product.available" formControlName="quantity">
           </mat-form-field>
 
           <span>Total price:</span>
@@ -58,14 +58,14 @@
         <div class="col d-flex justify-content-between align-items-center">
           <mat-form-field>
             <mat-label>Quantity</mat-label>
-            <input type="number" matInput placeholder="Quantity" min="1" [max]="maxQuantity" formControlName="quantity">
+            <input type="number" matInput placeholder="Quantity" min="1" [max]="product.available" formControlName="quantity">
           </mat-form-field>
 
           <span>Available:</span>
-          <span>{{ maxQuantity - product.quantity }}</span>
+          <span>{{ product.available - cart.quantity }}</span>
 
           <span>Total price:</span>
-          <span>{{ product.quantity * product.price | currency }}</span>
+          <span>{{ cart.quantity * product.price | currency }}</span>
         </div>
       </div>
     </div>
