@@ -10,6 +10,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Product } from '../shared';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Cart } from '../shared/cart';
 
 @Component({
   selector: 'app-product',
@@ -18,31 +19,51 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class ProductComponent implements OnInit, OnDestroy {
   @Input() product: Product;
-  @Input() isCatalog: boolean;
-  @Input() isCart: boolean;
+  @Input()
+  get cart(): Cart {
+    return this._cart;
+  }
+  set cart(cart: Cart) {
+    this._cart = cart;
+    this.product = this._cart.product;
+  }
 
   @Output() added: EventEmitter<Product> = new EventEmitter();
-  @Output() updated: EventEmitter<Product> = new EventEmitter();
-  @Output() removed: EventEmitter<Product> = new EventEmitter();
+  @Output() updated: EventEmitter<Cart> = new EventEmitter();
+  @Output() removed: EventEmitter<Cart> = new EventEmitter();
 
   public formGroup: FormGroup;
-  public maxQuantity = 0;
 
+  public get isCatalog(): boolean {
+    return !this._cart;
+  }
+  public get isCart(): boolean {
+    return !!this._cart;
+  }
+
+  public get quantity(): number {
+    return this.isCatalog ? this.product.quantity : this.cart.quantity;
+  }
+  public set quantity(quantity: number) {
+    const item = this.isCatalog ? this.product : this.cart;
+
+    item.quantity = quantity;
+  }
+
+  private _cart: Cart;
   private destroy$: Subject<void> = new Subject();
 
   constructor() {}
 
   ngOnInit(): void {
-    this.maxQuantity = this.product.getMax();
-
     this.formGroup = new FormGroup({
-      quantity: new FormControl(this.product.quantity),
+      quantity: new FormControl(this.quantity),
     });
 
     this.formGroup
       .get('quantity')
       .valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((quantity: number) => (this.product.quantity = quantity));
+      .subscribe((quantity: number) => (this.quantity = quantity));
   }
 
   ngOnDestroy(): void {
@@ -55,10 +76,10 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
   public updateClicked(): void {
-    this.updated.emit(this.product);
+    this.updated.emit(this.cart);
   }
 
   public removeClicked(): void {
-    this.removed.emit(this.product);
+    this.removed.emit(this.cart);
   }
 }

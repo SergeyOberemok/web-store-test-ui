@@ -1,10 +1,43 @@
-<div class="container">
-  <div class="row mb-3">
-    <div class="col">
-      <h3>Cart</h3>
+<ng-container *ngIf="(cart$ | async) as items; else empty">
+  <ng-container *ngTemplateOutlet="items.length > 0 ? list : empty; context: { $implicit: items }"></ng-container>
+</ng-container>
+
+<ng-template #list let-items>
+  <div class="container">
+    <div class="row mb-3">
+      <div class="col d-flex justify-content-between">
+        <h3>Cart</h3>
+
+        <div *ngIf="items.length > 0">
+          <button mat-raised-button type="button" (click)="cartCheckout()">Checkout</button>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 
-<app-product-list [products$]="products$" [isCart]="true" (updated)="updateCartItem($event)"
-  (removed)="removeCartItem($event)"></app-product-list>
+  <app-product-list
+    [cart]="items"
+    (updated)="updateCartItem($event)"
+    (removed)="removeCartItem($event)"
+  ></app-product-list>
+</ng-template>
+
+<ng-template #loading>
+  <div class="container">
+    <div class="row mb-3">
+      <div class="col">
+        <h3>Loading</h3>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #empty>
+  <div class="container">
+    <div class="row mb-3">
+      <div class="col">
+        <h3>Cart is empty</h3>
+      </div>
+    </div>
+  </div>
+</ng-template>

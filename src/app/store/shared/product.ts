@@ -20,8 +20,4 @@ export class Product implements ProductDto {
     this.price = 0;
     this.quantity = 0;
   }
-
-  public getMax(): number {
-    return this.available;
-  }
 }
