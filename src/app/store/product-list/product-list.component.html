@@ -1,21 +1,17 @@
 <div class="container">
-  <ng-container *ngIf="(products$ | async) as products; else empty">
-    <ng-container *ngFor="let product of products">
+  <ng-container >
+    <ng-container *ngFor="let item of items">
       <div class="row mb-3">
         <div class="col">
-          <app-product *ngIf="isCatalog" [product]="product" [isCatalog]="true" (added)="itemAdded($event)">
+          <app-product *ngIf="isCatalog" [product]="item" (added)="itemAdded($event)">
           </app-product>
 
-          <app-product *ngIf="isCart" [product]="product" [isCart]="true" (updated)="itemUpdated($event)"
+          <app-product *ngIf="isCart" [cart]="item" (updated)="itemUpdated($event)"
             (removed)="itemRemoved($event)"></app-product>
         </div>
       </div>
     </ng-container>
-
-    <ng-container *ngIf="products.length === 0" [ngTemplateOutlet]="empty"></ng-container>
   </ng-container>
 </div>
 
-<ng-template #empty>
-  <h3>Empty</h3>
-</ng-template>
+

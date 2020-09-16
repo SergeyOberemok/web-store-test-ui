@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { CartService } from '../services/cart.service';
 import { ProductsService } from '../services/products.service';
 import { Product } from '../shared';
+import { Cart } from '../shared/cart';
 
 @Component({
   selector: 'app-catalog',
@@ -18,13 +19,13 @@ export class CatalogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.products$ = this.productsService.fetchProducts();
+    this.products$ = this.productsService.fetchCart();
   }
 
   public addToCard($event: Product): void {
-    this.cartService.storeProduct($event).subscribe(
-      (storedProduct: Product) =>
-        (this.products$ = this.productsService.fetchProducts()),
+    this.cartService.storeCart($event).subscribe(
+      (storedCart: Cart) =>
+        (this.products$ = this.productsService.fetchCart()),
       (error: any) => console.error(error)
     );
   }
